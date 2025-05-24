@@ -1,0 +1,28 @@
+name: Deploy ValorMasterAgent
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT }}
+      - name: Install dependencies
+        run: |
+          pip install --upgrade google-cloud-aiplatform vertexai
+      - name: Build and push Docker image
+        run: |
+          IMAGE="us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/valor-master-repo/agent:$GITHUB_SHA"
+          docker build -t $IMAGE ./agent
+          docker push $IMAGE
+      - name: Update Vertex AI Agent
+        run: |
+          gcloud alpha generative-ai agents update ValorMasterAgent \
+            --region=us-central1 \
+            --artifact-staging-bucket=gs://valor-master-agent-staging \
+            --image=$IMAGE
