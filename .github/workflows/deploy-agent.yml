@@ -1,4 +1,4 @@
-name: Deploy ValorMasterAgent
+name: Deploy ValorMaster
 on:
   push:
     branches: [ main ]
@@ -22,7 +22,7 @@ jobs:
           docker push $IMAGE
       - name: Update Vertex AI Agent
         run: |
-          gcloud alpha generative-ai agents update ValorMasterAgent \
+          gcloud alpha generative-ai agents update ValorMaster \
             --region=us-central1 \
             --artifact-staging-bucket=gs://valor-master-agent-staging \
             --image=$IMAGE
