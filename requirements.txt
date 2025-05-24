@@ -1,0 +1,4 @@
+google-cloud-aiplatform>=1.32.0
+vertexai>=0.3.0
+protobuf
+google-auth
