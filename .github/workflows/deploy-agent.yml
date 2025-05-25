@@ -1,4 +1,4 @@
-name: Deploy valormaster
+name: Deploy ValorMasterAgent
 on:
   push:
     branches: [ main ]
@@ -11,6 +11,11 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+          create_credentials_file: true
+          export_environment_variables: true
+      - name: Debug GCP_SA_KEY
+        # Print first character of the secret (should be '{')
+        run: echo "${{ secrets.GCP_SA_KEY }}" | head -c 1
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
@@ -21,12 +26,27 @@ jobs:
             artifact-registry
       - name: Build and push Docker image
         run: |
-          IMAGE="us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/valormaster-repo/agent:${{ github.sha }}"
+          IMAGE="us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/valor-master-repo/agent:${{ github.sha }}"
           docker build -t $IMAGE -f agent/Dockerfile .
           docker push $IMAGE
       - name: Update Vertex AI Agent
         run: |
-          gcloud alpha generative-ai agents update valormaster \
+          gcloud alpha generative-ai agents update ValorMasterAgent \
             --region=us-central1 \
             --artifact-staging-bucket=gs://valor-master-agent-staging \
             --image=$IMAGE
+```### 3.5 Configure GitHub Secrets
+
+1. In your GitHub repo **Settings** → **Secrets and variables** → **Actions**, click **New repository secret**.
+2. Add the following secrets:
+   - **Name:** `GCP_SA_KEY`\
+     **Value:** Paste the **raw JSON** contents of your GCP service account key. Ensure it starts with `{` and ends with `}`.
+   - **Name:** `GCP_PROJECT`\
+     **Value:** Your GCP project ID (e.g., `valor-master-123`).
+3. Confirm both secrets appear.
+
+*Optional Debug Step*:
+
+```yaml
+- name: Debug GCP_SA_KEY
+  run: echo "${{ secrets.GCP_SA_KEY:0:1 }}"
