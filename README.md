@@ -1,4 +1,4 @@
-# ValorMaster
+# valormaster
 ### 3.3 Prepare the Environment
 1. **Install Python dependencies**:
 ```bash

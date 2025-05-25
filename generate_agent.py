@@ -1,4 +1,4 @@
 python - << 'PYCODE'
-from agent.agent import ValorMaster
-print(ValorMaster())
+from agent.agent import valormaster
+print(valormaster())
 PYCODE
