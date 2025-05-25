@@ -17,7 +17,7 @@ jobs:
           pip install --upgrade google-cloud-aiplatform vertexai
       - name: Build and push Docker image
         run: |
-          IMAGE="us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ValorMaster-repo/agent:$GITHUB_SHA"
+          IMAGE="us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/valormaster-repo/agent:$GITHUB_SHA"
           docker build -t $IMAGE ./agent
           docker push $IMAGE
       - name: Update Vertex AI Agent
