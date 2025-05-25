@@ -31,7 +31,7 @@ jobs:
           docker push $IMAGE
       - name: Update Vertex AI Agent
         run: |
-          gcloud alpha generative-ai agents update ValorMaster \
+          gcloud alpha generative-ai agents update valormaster \
             --region=us-central1 \
             --artifact-staging-bucket=gs://valor-master-agent-staging \
             --image=$IMAGE
