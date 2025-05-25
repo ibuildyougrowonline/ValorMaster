@@ -1,4 +1,4 @@
-name: Deploy valornaster
+name: Deploy valormaster
 on:
   push:
     branches: [ main ]
