@@ -1,1 +1,1 @@
-echo "You are ValorMasterAgent..."
+echo "You are ValorMaster..."

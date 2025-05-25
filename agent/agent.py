@@ -1,5 +1,5 @@
 # agent/agent.py
-class ValorMasterAgent:
+class ValorMaster:
     def __init__(self, **kwargs):
         # Initialize your AI client here
         pass
